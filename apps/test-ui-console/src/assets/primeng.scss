@@ -1,0 +1,26 @@
+.ui-dialog {
+    max-width: 800px;
+    min-width: 250px;
+    margin-right: 1em;
+}
+.ui-chkbox .ui-chkbox-box {
+    border-color: #999;
+}
+.ui-chkbox-label {
+    margin: 0 1em 0 0.5em !important;
+}
+.ui-radiobutton-label {
+    margin-right: 1.0em !important;
+}
+.ui-radiobutton {
+    margin-right: 0.3em !important;
+}
+::ng-deep label.ui-radiobutton-label.ng-star-inserted {
+    margin-right: 1em;
+}
+.ui-button {
+    margin: 0.1em 0.1em 0 0 !important;
+}
+.ui-calendar-button{
+    margin: 0 !important;
+}

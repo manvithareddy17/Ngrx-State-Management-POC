@@ -1,0 +1,17 @@
+[
+    {
+        "ID": "1",
+        "Message": "I am Error1",
+        "Type": "Api-Error"
+    },
+    {
+        "ID": "2",
+        "Message": "I am Error2",
+        "Type": "Html-Error"
+    },
+    {
+        "ID": "3",
+        "Message": "I am Error3",
+        "Type": "Http-Error"
+    }
+]

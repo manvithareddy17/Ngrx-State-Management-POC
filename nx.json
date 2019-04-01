@@ -7,5 +7,18 @@
     "tslint.json": "*",
     "nx.json": "*"
   },
-  "projects": {}
+  "projects": {
+    "test-ui-console": {
+      "tags": []
+    },
+    "test-ui-console-e2e": {
+      "tags": []
+    },
+    "shared-data-access": {
+      "tags": ["n"]
+    },
+    "sam-feature-shell": {
+      "tags": []
+    }
+  }
 }

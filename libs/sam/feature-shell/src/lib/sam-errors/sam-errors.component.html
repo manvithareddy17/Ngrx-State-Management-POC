@@ -1,0 +1,40 @@
+<!-- <div id="samTypeDiv" *ngIf="globalErros$ != null" [formGroup]="errorListFormGroup"> -->
+
+<h1>I am in SAM Library</h1>
+<h4>Displaying Ngrx Error State</h4>
+
+
+<table class="table table-striped" style="text-align: left">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Id</th>
+      <th>Message</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let error of globalErros$ | async">
+      <td>
+        <div class="btn-group">
+          <div class="ui-grid-col-12">
+            <button pButton id="btn_edit" type="" (click)="editError(error)" class="btn-single-width" title="Edit"
+              label="Edit"></button>
+            <button pButton id="btn_delete" type="delete" (click)="removeError(error)" class="btn btn-single-width"
+              title="Delete" label="Delete"></button>
+          </div>
+        </div>
+      </td>
+      <td>{{error.Id}}</td>
+      <td>{{error.Message}}</td>
+      <td>{{error.Type}}</td>
+    </tr>
+  </tbody>
+  </table>
+  
+  <div class="ui-grid-col-12">
+    <button pButton id="btn_add" type="button" (click)="addError()" class="btn btn-single-width" title="Add" label="Add"></button>
+    <button pButton id="btn_add_to_sam" type="button" (click)="redirectToSam()" class="btn btn-single-width" title="Add"
+      label="Go To Sam"></button>
+  <!-- </div> -->
+</div>

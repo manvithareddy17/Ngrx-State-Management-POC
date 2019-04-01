@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@ngrxsample/shared/data-access": [
+        "libs/shared/data-access/src/index.ts"
+      ],
+      "@ngrxsample/sam/feature-shell": ["libs/sam/feature-shell/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
