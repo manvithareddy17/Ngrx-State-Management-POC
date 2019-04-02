@@ -1,99 +1,84 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { SharedPartialState, ErrorType } from './shared.reducer';
+import { SharedPartialState } from './shared.reducer';
+import 'rxjs';
 import {
   SharedActionTypes,
-  GetErrors,
-  GetErrorsError,
-  GetErrorsSuccess,
   UpdateError,
   UpdateErrorSuccess,
   UpdateErrorError,
-  SharedErrorStateLoad,
-  SharedErrorStateLoaded,
-  SharedErrorStateLoadError
+  GetErrorsSuccess,
+  GetErrorsError,
+  GetErrors,
+  AddErrorr,
+  GetErrorSuccess,
+  DeleteErrorrError,
+  DeleteErrorr,
+  GetError,
+  AddErrorrError
 } from './shared.actions';
+import { Action } from '@ngrx/store';
+import { ErrorTypeService } from '../errorTypeService';
+import { Observable } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class SharedEffects {
-
-
   constructor(
-    private actions$: Actions,
-    private dataPersistence: DataPersistence<SharedPartialState>
+    private actions$: Actions, private svc: ErrorTypeService,
+    private dataPersistence: DataPersistence<SharedPartialState>,
+    private router: Router
   ) { }
+  //actions$ observable emits new value each time action gets dispatched 
 
-  @Effect() loadShared$ = this.dataPersistence.fetch(
-    SharedActionTypes.SharedErrorStateLoad,
-    {
-      run: (action: SharedErrorStateLoad, state: SharedPartialState) => {
-        // Your custom REST 'load' logic goes here. For now just return an empty list...
-        return new SharedErrorStateLoaded([
-          { "Id": '1', "Message": "Error 1 from api load", "Type": "Error" },
-          { "Id": '2', "Message": "Warning 1 from api load", "Type": "Warning" }]);
-      },
 
-      onError: (action: SharedErrorStateLoad, error) => {
-        console.error('Error', error);
-        return new SharedErrorStateLoadError(error);
-      }
-    }
+  @Effect()
+  getAllErrorTypes$: Observable<Action> = this.actions$.pipe(
+    ofType(SharedActionTypes.GetErrorsType),
+    switchMap(() => this.svc.findAll()),
+    map(heroes => new GetErrorsSuccess(heroes)),
+    catchError((err) => [new GetErrorsError(err)])
+    //ofType is used to identify this is the right action. It takes one parametric type, which is type of the action 
+    //Next specify whatr actiontype we are looking for
   );
 
-  // @Effect() getErrors$ = this.dataPersistence.fetch(
-  //   SharedActionTypes.GetErrors,
-  //   {
-  //     run: (action: GetErrors, state: SharedPartialState) => {
-  //       // Your custom REST 'load' logic goes here. For now just return an empty list...
-  //       return new GetErrorsSuccess([
-  //         { "Id": '1', "Message": "Error 1 from api load", "Type": "Error" },
-  //         { "Id": '2', "Message": "Warning 1 from api load", "Type": "Warning" }]);
-  //     },
 
-  //     onError: (action: GetErrors, error) => {
-  //       console.error('Error', error);
-  //       return new GetErrorsError(error);
-  //     }
-  //   }
-  // );
-
-  @Effect() updateErrors$ = this.dataPersistence.fetch(
-    SharedActionTypes.UpdateError,
-    {
-      run: (action: UpdateError, state: SharedPartialState) => {
-        // Your custom REST 'load' logic goes here. For now just return an empty list...
-        return new UpdateErrorSuccess()
-      },
-      
-      onError: (action: UpdateError, error) => {
-        console.error('Error', error);
-        return new UpdateErrorError(error);
-      }
-    }
+  @Effect()
+  getErrorTypeById$ = this.actions$.pipe(
+    ofType(SharedActionTypes.GetErrorType),
+    map((action: GetError) => action.payload),
+    switchMap(id => this.svc.findById(id)),
+    map(hero => new GetErrorSuccess(hero))
+    //catchError((err) => [new GetErrorError(err)])
   );
-  // @Effect()
-  // updateGame$ = this.actions$
-  //   .ofType(gameActions.UPDATE_GAME)
-  //   .map((action: UpdateGame) => action.payload)
-  //   .switchMap(game => this.svc.update(game))
-  //   .map(() => new UpdateGameSuccess())
-  //   .catch((err) => [new UpdateGameError(err)]);
 
-  // @Effect() updateGame$ = this.actions$
-  //   .ofType(SharedActionTypes.UpdateError)
-  //   .map((action: UpdateError) => action.payload)
-  //   .map(() => new UpdateErrorSuccess())
-  //   .catch((err) => [new UpdateErrorError(err)]);
+  @Effect()
+  createGame$ = this.actions$.pipe(
+    ofType(SharedActionTypes.AddErrorrType),
+    map((action: AddErrorr) => action.payload),
+    switchMap(newError => this.svc.insert(newError)),
+    // map((response) => new AddErrorr(response))
+    catchError((err) => [new AddErrorrError(err)])
+  );
 
-  // @Effect() addErrorr$ = this.dataPersistence.fetch(
-  //   SharedActionTypes.AddErrorr,
-  //   {
-  //     run: (action: AddErrorr, state: SharedPartialState) => {
-  //       return new AddErrorrSuccess([
+  @Effect()
+  updateGame$ = this.actions$.pipe(
+    ofType(SharedActionTypes.UpdateErrorType),
+    map((action: UpdateError) => action.payload),
+    switchMap(error => this.svc.update(error)),
+    map(() => new UpdateErrorSuccess()),
+    catchError((err) => [new UpdateErrorError(err)]));
 
-  //       ])
-  //     }
-  //   }
-  // )
+  @Effect()
+  removeGame$ = this.actions$.pipe(
+    ofType(SharedActionTypes.DeleteErrorrType),
+    map((action: DeleteErrorr) => action.payload),
+    switchMap(id => this.svc.delete(id)),
+    // map((hero: ErrorType) => new DeleteErrorSuccess(hero)),
+    catchError((err) => [new DeleteErrorrError(err)]),
+   
+  );
+
 }

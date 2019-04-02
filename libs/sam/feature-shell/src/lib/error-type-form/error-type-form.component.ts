@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedFacade } from '@ngrxsample/shared/data-access';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ErrorType } from 'libs/shared/data-access/src/lib/state/shared.reducer';
+import { ErrorType } from 'libs/shared/data-access/src/lib/errorType';
 
 @Component({
   selector: 'ngrxsample-error-type-form',

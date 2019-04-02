@@ -29,7 +29,7 @@ createSelector(
   getSharedState,
   (state: SharedState) => {
     console.log('I am state')
-    if(state.action === SharedActionTypes.GetError && state.loaded) {
+    if(state.action === SharedActionTypes.GetErrorType && state.loaded) {
       console.log('I am state',state.selected)
       return state.selected;
       
@@ -40,7 +40,7 @@ createSelector(
   });
   const isErrortypeUpdated = createSelector(getSharedState,
     (state: SharedState) => 
-    state.action === SharedActionTypes.UpdateError
+    state.action === SharedActionTypes.UpdateErrorType
     && state.loaded && !state.apiError);
 
 
@@ -50,11 +50,11 @@ const hasApiError = createSelector(
 );
 const isErrortypeDeleted = createSelector(getSharedState,
   (state: SharedState) => 
-     state.action === SharedActionTypes.DeleteErrorr
+     state.action === SharedActionTypes.DeleteErrorrType
      && state.loaded && !state.apiError);
 const getDeleteError = createSelector(getSharedState,
   (state: SharedState) =>{
-  return state.action === SharedActionTypes.DeleteErrorrError
+  return state.action === SharedActionTypes.DeleteErrorrErrorType
   ? state.apiError
   : null;
   });

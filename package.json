@@ -43,12 +43,13 @@
     "@ngrx/router-store": "7.2.0",
     "@ngrx/store": "^7.2.0",
     "@nrwl/nx": "7.6.2",
+    "angular-in-memory-web-api": "^0.8.0",
     "core-js": "^2.5.4",
     "jasmine-marbles": "^0.4.1",
     "primeicons": "^1.0.0",
     "primeng": "^7.1.0",
     "redux-mock-store": "^1.5.3",
-    "rxjs": "6.3.3",
+    "rxjs": "^6.3.3",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

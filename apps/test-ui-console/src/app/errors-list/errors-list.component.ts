@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedFacade } from '@ngrxsample/shared/data-access'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ErrorType } from 'libs/shared/data-access/src/lib/state/shared.reducer';
 import {  HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ErrorType } from 'libs/shared/data-access/src/lib/errorType';
 @Component({
   selector: 'ngrxsample-errors-list',
   templateUrl: './errors-list.component.html',

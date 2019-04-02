@@ -1,5 +1,5 @@
 import { SharedAction, SharedActionTypes } from './shared.actions';
-
+import { ErrorType } from '../errorType'
 export const SHARED_FEATURE_KEY = 'shared';
 
 /**
@@ -11,11 +11,7 @@ export const SHARED_FEATURE_KEY = 'shared';
  */
 
 /* tslint:disable:no-empty-interface */
-export class ErrorType {
-  Id: string;
-  Type: string;
-  Message: string;
-}
+
 
 export interface SharedState {
   errors: ErrorType[]; // list of Shared; analogous to a sql normalized table
@@ -46,7 +42,7 @@ export function sharedReducer(
 
 
   switch (action.type) {
-    case SharedActionTypes.SharedErrorStateLoaded: {
+    case SharedActionTypes.SharedErrorStateLoadedType: {
       state = {
         ...state,
         errors: action.payload,
@@ -59,16 +55,16 @@ export function sharedReducer(
      /*************************
      * GET all errors actions
      ************************/
-    case SharedActionTypes.GetErrors:
+    case SharedActionTypes.GetErrorsType:
       return {
         ...state,
-        action: SharedActionTypes.GetErrors,
+        action: SharedActionTypes.GetErrorsType,
         loaded: false,
         selected: null,
         apiError: null
       };
 
-    case SharedActionTypes.GetErrorsSuccess:
+    case SharedActionTypes.GetErrorsSuccessType:
       return {
         ...state,
         errors: action.payload,
@@ -76,7 +72,7 @@ export function sharedReducer(
         selected: null,
         apiError: null
       };
-    case SharedActionTypes.GetErrorsError:
+    case SharedActionTypes.GetErrorsErrorType:
       return {
         ...state,
         loaded: true,
@@ -84,30 +80,30 @@ export function sharedReducer(
         apiError: action.payload
       };
 
-      case SharedActionTypes.GetError:
+      case SharedActionTypes.GetErrorType:
       return {
         ...state,
-        action: SharedActionTypes.GetError,
+        action: SharedActionTypes.GetErrorType,
         loaded: false,
         selected: null,
         apiError: null
       };
-    case SharedActionTypes.GetErrorSuccess:
+    case SharedActionTypes.GetErrorSuccessType:
       return {
         ...state,
-        action: SharedActionTypes.GetError,
+        action: SharedActionTypes.GetErrorType,
         selected: action.payload,
         loaded: true,
         apiError: null
       };
       //Add Error
-    case SharedActionTypes.AddErrorr: {
+    case SharedActionTypes.AddErrorrType: {
 
       const errors = [...state.errors, action.payload]
       state = {
         ...state,
         selected: action.payload,
-        action: SharedActionTypes.AddErrorr,
+        action: SharedActionTypes.AddErrorrType,
         errors: errors,
         loaded: true
       };
@@ -116,20 +112,28 @@ export function sharedReducer(
       break;
     }
     
+    case SharedActionTypes.AddErrorrErrorType: {
+      return {
+        ...state,
+        selected: null,
+        loaded: true,
+        apiError: action.payload
+      }
+    }
     //Update ErrorType
-    case SharedActionTypes.UpdateError: {
+    case SharedActionTypes.UpdateErrorType: {
       const selected = state.errors.find(f => f.Id === action.payload.Id);
 
       return {
         ...state,
         selected,
-        action: SharedActionTypes.UpdateError,
+        action: SharedActionTypes.UpdateErrorType,
         loaded: true,
         apiError: null
       };
     }
 
-    case SharedActionTypes.UpdateErrorSuccess:
+    case SharedActionTypes.UpdateErrorSuccessType:
       {
         console.log('I am reducer success', state)
         const index = state
@@ -152,7 +156,7 @@ export function sharedReducer(
         }
         return state;
       }
-    case SharedActionTypes.UpdateErrorError:
+    case SharedActionTypes.UpdateErrorErrorType:
       return {
         ...state,
         loaded: true,
@@ -161,13 +165,14 @@ export function sharedReducer(
       };
 
       // Delete Error
-    case SharedActionTypes.DeleteErrorr:{
+    case SharedActionTypes.DeleteErrorrType:{
     let index = state.errors.map(x=>x.Id).indexOf(action.payload.Id)
     let newErrorState = [...state.errors.slice(0, index), ...state.errors.slice(index + 1)];
     delete newErrorState[action.payload.Id]
     state = {
       ...state,
       errors: newErrorState,
+      action: SharedActionTypes.DeleteErrorrType,
       loaded: true,
       apiError: null,
     };
@@ -175,7 +180,7 @@ export function sharedReducer(
 
     break;
       }
-    case SharedActionTypes.DeleteErrorrError:
+    case SharedActionTypes.DeleteErrorrErrorType:
       return {
         ...state,
         selected: null,
