@@ -26,6 +26,7 @@ export interface SharedPartialState {
   readonly [SHARED_FEATURE_KEY]: SharedState;
 }
 
+//Initial State of our Shared State. If the state is not mentioned it takes the default initial state
 export const initialState: SharedState = {
   errors: [],
   loaded: false,
@@ -91,7 +92,7 @@ export function sharedReducer(
     case SharedActionTypes.GetErrorSuccessType:
       return {
         ...state,
-        action: SharedActionTypes.GetErrorType,
+        action: SharedActionTypes.GetErrorSuccessType,
         selected: action.payload,
         loaded: true,
         apiError: null
@@ -107,7 +108,7 @@ export function sharedReducer(
         errors: errors,
         loaded: true
       };
-      console.log('Added error  action new state' + JSON.stringify(state));
+      //console.log('Added error  action new state' + JSON.stringify(state));
 
       break;
     }
@@ -135,7 +136,7 @@ export function sharedReducer(
 
     case SharedActionTypes.UpdateErrorSuccessType:
       {
-        console.log('I am reducer success', state)
+        //console.log('I am reducer success', state)
         const index = state
           .errors
           .findIndex(selected => selected.Id === state.selected.Id);
@@ -145,7 +146,7 @@ export function sharedReducer(
             state.selected,
             ...state.errors.slice(index + 1)
           ];
-          console.log('I am selected', state.selected.Message, 'Index NUmber', index)
+          //console.log('I am selected', state.selected.Message, 'Index NUmber', index)
           return {
             ...state,
             errors,
@@ -176,7 +177,7 @@ export function sharedReducer(
       loaded: true,
       apiError: null,
     };
-    console.log('Delete state'+ JSON.stringify(state));
+    //console.log('Delete state'+ JSON.stringify(state));
 
     break;
       }

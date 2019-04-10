@@ -21,6 +21,7 @@ import {
 import { Action } from '@ngrx/store';
 import { ErrorTypeService } from '../errorTypeService';
 import { Observable } from 'rxjs';
+import 'rxjs/add/observable/of';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -28,8 +29,6 @@ import { Router } from '@angular/router';
 export class SharedEffects {
   constructor(
     private actions$: Actions, private svc: ErrorTypeService,
-    private dataPersistence: DataPersistence<SharedPartialState>,
-    private router: Router
   ) { }
   //actions$ observable emits new value each time action gets dispatched 
 

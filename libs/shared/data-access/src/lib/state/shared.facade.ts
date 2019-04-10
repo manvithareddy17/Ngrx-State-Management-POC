@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { SharedPartialState } from './shared.reducer';
 import { sharedQuery } from './shared.selectors';
-import { SharedErrorStateLoad, AddErrorr, DeleteErrorr, GetErrorSuccess, UpdateError, UpdateErrorSuccess, GetErrors } from './shared.actions';
+import { AddErrorr, DeleteErrorr, GetErrorSuccess, UpdateError, GetErrors } from './shared.actions';
 import { ErrorType } from '../errorType';
 
 @Injectable()
 export class SharedFacade {
-  loaded$ = this.store.pipe(select(sharedQuery.hasLoaded));
+  //loaded$ = this.store.pipe(select(sharedQuery.hasLoaded));
   allErrors$ = this.store.pipe(select(sharedQuery.getAllErrors));
   allErrorApiExceptions$ = this.store.pipe(select(sharedQuery.getApiError));
-  hasApiExceptions$ = this.store.pipe(select(sharedQuery.hasApiError));
   selectedError$ = this.store.pipe(select(sharedQuery.getError));
   constructor(private store: Store<SharedPartialState>) {}
 

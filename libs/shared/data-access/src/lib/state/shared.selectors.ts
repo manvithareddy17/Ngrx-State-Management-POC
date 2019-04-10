@@ -18,7 +18,6 @@ const getAllErrors = createSelector(
   getSharedState,
   hasLoaded,
   (state: SharedState,isLoaded) => {
-   // console.log('Satate in selector '+JSON.stringify( state));
     return isLoaded ? state.errors : [];
     
   }
@@ -28,7 +27,6 @@ createSelector(
   
   getSharedState,
   (state: SharedState) => {
-    console.log('I am state')
     if(state.action === SharedActionTypes.GetErrorType && state.loaded) {
       console.log('I am state',state.selected)
       return state.selected;

@@ -23,12 +23,13 @@ export class ErrorsListComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    console.log('... Initializing ErrorList component');
     this.errorListFormGroup = this.formBuilder.group({
       Id: ['', Validators.required],
       Message: ['', Validators.required],
       Type: ['', Validators.required]
     });
+    
   }
   loadAllErrorTypes() {
     this.formSubmitted = true;

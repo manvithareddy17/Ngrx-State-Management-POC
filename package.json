@@ -50,6 +50,7 @@
     "primeng": "^7.1.0",
     "redux-mock-store": "^1.5.3",
     "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.4.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
@@ -67,6 +68,7 @@
     "cypress": "3.1.0",
     "dotenv": "6.2.0",
     "jest": "23.0.0",
+    "jest-marbles": "^2.3.1",
     "jest-preset-angular": "6.0.1",
     "ngrx-store-freeze": "0.2.4",
     "prettier": "1.15.2",

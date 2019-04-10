@@ -1,5 +1,5 @@
 export class ErrorType {
-    Id: string;
+    Id: any;
     Type: string;
     Message: string;
   }

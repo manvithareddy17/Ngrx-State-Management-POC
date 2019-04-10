@@ -14,20 +14,22 @@ import { sharedQuery } from './shared.selectors';
 
 import {
   SharedState,
-  ErrorType,
   initialState,
   sharedReducer
 } from './shared.reducer';
 import { AddErrorr } from './shared.actions';
+import { ErrorType } from '../errorType';
+import { ErrorTypeService } from '../errorTypeService';
 
 interface TestSchema {
   shared: SharedState;
 }
-
+jest.mock('@ngrx/effects')
 describe('SharedFacade', () => {
   let facade: SharedFacade;
   let store: Store<TestSchema>;
   let createError;
+  let selectedError;
 
   beforeEach(() => {
     createError = (Id: string, message = '',type:string =''): ErrorType => ({
@@ -35,6 +37,7 @@ describe('SharedFacade', () => {
       Message: message || `name-${Id}`,
       Type : type || 'Error'
     });
+   // selectedError = ()
   });
 
   describe('used in NgModule', () => {
@@ -66,29 +69,29 @@ describe('SharedFacade', () => {
     /**
      * The initially generated facade::loadAll() returns empty array
      */
-    it('loadAll() should return  list of 2 with loaded == true', async done => {
-      try {
-        let list = await readFirst(facade.allErrors$);
-        let isLoaded = await readFirst(facade.loaded$);
+    // it('loadAll() should return  list of 2 with loaded == true', async done => {
+    //   try {
+    //     let list = await readFirst(facade.allErrors$);
+    //     //let isLoaded = await readFirst(facade.loaded$);
 
-        expect(list.length).toBe(0);
-        expect(isLoaded).toBe(false);
+    //     expect(list.length).toBe(0);
+    //     expect(isLoaded).toBe(false);
 
-        facade.loadAll();
+    //     facade.loadAll();
 
-        list = await readFirst(facade.allErrors$);
-        isLoaded = await readFirst(facade.loaded$);
+    //     list = await readFirst(facade.allErrors$);
+    //     isLoaded = await readFirst(facade.loaded$);
 
-        console.log(JSON.stringify(list))
+    //     console.log(JSON.stringify(list))
 
-        expect(list.length).toBe(2);
-        expect(isLoaded).toBe(true);
+    //     expect(list.length).toBe(2);
+    //     expect(isLoaded).toBe(true);
 
-        done();
-      } catch (err) {
-        done.fail(err);
-      }
-    });
+    //     done();
+    //   } catch (err) {
+    //     done.fail(err);
+    //   }
+    // });
 
     /**
      * Use `SharedLoaded` to manually submit list for state management
@@ -96,20 +99,20 @@ describe('SharedFacade', () => {
     it('allErrors$ should return the Added errors ; and loaded flag == true', async done => {
       try {
         let list = await readFirst(facade.allErrors$);
-        let isLoaded = await readFirst(facade.loaded$);
+        //let isLoaded = await readFirst(facade.loaded$);
 
         expect(list.length).toBe(0);
-        expect(isLoaded).toBe(false);
+        //expect(isLoaded).toBe(false);
 
         store.dispatch(
           new AddErrorr(createError(1,'Test Errro1','Error'))
         );
 
         list = await readFirst(facade.allErrors$);
-        isLoaded = await readFirst(facade.loaded$);
+        //isLoaded = await readFirst(facade.loaded$);
 
         expect(list.length).toBe(1);
-        expect(isLoaded).toBe(true);
+        //expect(isLoaded).toBe(true);
 
         done();
       } catch (err) {
@@ -117,24 +120,28 @@ describe('SharedFacade', () => {
       }
     });
 
+  it('', async done => {})
+
     it('allErrors$ should return the  errors  after delted an item; and loaded flag == true', async done => {
       try {
         let list = await readFirst(facade.allErrors$);
-        let isLoaded = await readFirst(facade.loaded$);
+        //let isLoaded = await readFirst(facade.loaded$);
+        let selectedError = await
 
         expect(list.length).toBe(0);
-        expect(isLoaded).toBe(false);
+        //expect(isLoaded).toBe(false);
 
-        facade.addError(createError("1",'Test Error1','Error')) // or u can do store.dispatch adderror
-        facade.addError(createError("2",'Test Error2','Error'))
-        facade.addError(createError("3",'Test Error3','Error'))
-        facade.removeError("2")
+        facade.addError(createError('1','Test Error1','Error')) // or u can do store.dispatch adderror
+        facade.addError(createError('2','Test Error2','Error'))
+        facade.addError(createError('3','Test Error3','Error'))
+        //let error = facade.currentSelectedError(selectedError(2,'Test Error2','Error'))
+        facade.removeError(createError('2'))
 
         list = await readFirst(facade.allErrors$);
-        isLoaded = await readFirst(facade.loaded$);
+        //isLoaded = await readFirst(facade.loaded$);
 
         expect(list.length).toBe(2);
-        expect(isLoaded).toBe(true);
+        //expect(isLoaded).toBe(true);
 
         
 

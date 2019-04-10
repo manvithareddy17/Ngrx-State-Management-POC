@@ -1,19 +1,19 @@
-import { AddErrorr, GetErrors, GetErrorsSuccess, GetErrorsError, GetError, GetErrorSuccess, UpdateError, UpdateErrorSuccess, UpdateErrorError, DeleteErrorr, DeleteErrorrError } from './shared.actions';
+import { AddErrorr, GetErrors, GetErrorsSuccess, GetErrorsError, GetError, GetErrorSuccess, UpdateError, UpdateErrorSuccess, UpdateErrorError, DeleteErrorr, DeleteErrorrError, SharedActionTypes, AddErrorrError } from './shared.actions';
 import {
   SharedState,
   initialState,
   sharedReducer,
-  ErrorType
 } from './shared.reducer';
+import { ErrorType } from '../errorType';
 
 
 const MOCK_DATA: ErrorType[] = [
   {
-    Id: '1',
+    Id: 1,
     Message: 'Message 1',
     Type: 'Error',
   }, {
-    Id: '2',
+    Id: 2,
     Message: 'Message 2',
     Type: 'ApiError',
   }
@@ -38,28 +38,28 @@ let state: SharedState = {
     });
   });
   describe('Load all Errortypes REDUCER', () => {
-    it('should reduce the action GetErrors', () => {
+    it('should reduce the action GetErrorsType', () => {
       const action = new GetErrors();
       const newState = sharedReducer(state, action);
       expect({ ...newState }).toEqual({
         ...state,
-        action: GetErrors,
+        action: SharedActionTypes.GetErrorsType,
         loaded: false
       });
       state = newState;
     });
-    it('should reduce the action GetErrorsSuccess', () => {
+    it('should reduce the action GetErrorsSuccessType', () => {
       const payload = [...MOCK_DATA];
       const action = new GetErrorsSuccess(payload);
       const newState = sharedReducer(state, action);
       expect({ ...newState }).toEqual({
         ...state,
-        data: payload,
+        errors: payload,
         loaded: true
       });
       state = newState;
     });
-    it('should reduce the action GetErrorsError', () => {
+    it('should reduce the action GetErrorsErrorType', () => {
       const payload = new Error('Error loading all errors');
       const action = new GetErrorsError(payload);
       const newState = sharedReducer(state, action);
@@ -71,43 +71,35 @@ let state: SharedState = {
     });
   });
 
-  describe('GET Errortypes by id REDUCER', () => {
-    it('should reduce the action GetError', () => {
-      const payload = MOCK_DATA['0'].Id;
+  describe('GET ErrorTypes by id REDUCER', () => {
+    it('should reduce the action GetErrorType', () => {
+      const payload = MOCK_DATA[0].Id;
       const action = new GetError(payload);
       const newState = sharedReducer(state, action);
       expect({ ...newState }).toEqual({
         ...state,
-        action: GetError,
+        action: SharedActionTypes.GetErrorType,
         loaded: false
       });
       state = newState;
     });
-    it('should reduce the action GetErrorSuccess', () => {
+    it('should reduce the action GetErrorSuccessType', () => {
       const payload = MOCK_DATA[0];
       const action = new GetErrorSuccess(payload);
       const newState = sharedReducer(state, action);
       expect({ ...newState }).toEqual({
         ...state,
+        action: SharedActionTypes.GetErrorSuccessType,
         selected: payload,
         loaded: true
       });
       state = { ...state, selected: null, loaded: true };
     });
-    // it('should reduce the action GetErrorError', () => {
-    //   const payload = new Error('Error loading the Errortype');
-    //   const action = new GetErrorError(payload);
-    //   const newState = sharedReducer(state, action);
-    //   expect({ ...newState }).toEqual({
-    //     ...state,
-    //     loaded: true,
-    //     apiError: action.payload
-    //   });
-    // });
   });
 
   describe('Create new Errortype REDUCER', () => {
-    it('should reduce the action AddErrorr', () => {
+
+    it('should reduce the action AddErrorSuccess', () => {
       const payload = {
         Id: 3,
         Message: 'Message 3',
@@ -117,53 +109,38 @@ let state: SharedState = {
       const newState = sharedReducer(state, action);
       expect({ ...newState }).toEqual({
         ...state,
+        errors: [
+          ...state.errors, payload
+        ],
         selected: payload,
-        action: AddErrorr,
-        loaded: false
+        action: SharedActionTypes.AddErrorrType,
+        loaded: true
       });
-      state = newState;
+      state = { ...state, selected: null, loaded: true };
     });
-    // it('should reduce the action AddErrorSuccess', () => {
-    //   const payload = 3;
-    //   const action = new AddErrorrSuccess(payload);
-    //   const newState = sharedReducer(state, action);
-    //   expect({ ...newState }).toEqual({
-    //     ...state,
-    //     errors: [
-    //       ...state.errors,
-    //       {
-    //         ...state.selected,
-    //         id: payload
-    //       }
-    //     ],
-    //     selected: null,
-    //     loaded: true
-    //   });
-    //   state = { ...state, selected: null, loaded: true };
-    // });
-    // it('should reduce the action AddErrorError', () => {
-    //   const payload = new Error('Error creating the ErrorType');
-    //   const action = new AddErrorrError(payload);
-    //   const newState = sharedReducer(state, action);
-    //   expect({ ...newState }).toEqual({
-    //     ...state,
-    //     selected: null,
-    //     loaded: true,
-    //     apiError: payload
-    //   });
-    // });
+    it('should reduce the action AddErrorError', () => {
+      const payload = new Error('Error creating the ErrorType');
+      const action = new AddErrorrError(payload);
+      const newState = sharedReducer(state, action);
+      expect({ ...newState }).toEqual({
+        ...state,
+        selected: null,
+        loaded: true,
+        apiError: payload
+      });
+    });
   });
 
   describe('Update existing errortype REDUCER', () => {
     it('should reduce the action update error', () => {
-      const payload = { ...MOCK_DATA[0], description: 'Descripion of Errortype 1 edited' };
+      const payload = { ...MOCK_DATA[0] };
       const action = new UpdateError(payload);
       const newState = sharedReducer(state, action);
       expect({ ...newState }).toEqual({
         ...state,
         selected: payload,
-        action: UpdateError,
-        loaded: false
+        action: SharedActionTypes.UpdateErrorType,
+        loaded: true
       });
       state = newState;
     });
@@ -176,7 +153,12 @@ let state: SharedState = {
       ];
       const action = new UpdateErrorSuccess();
       const newState = sharedReducer(state, action);
-      expect({ ...newState }).toEqual({ ...state, errors, loaded: true, selected: null, apiError: null });
+      expect({ ...newState }).toEqual(
+        { ...state, 
+          errors, 
+          loaded: true, 
+          selected: null, 
+          apiError: null });
       state = { ...state, selected: null, loaded: true };
     });
     it('should reduce the action UpdateErrorError', () => {
@@ -187,59 +169,38 @@ let state: SharedState = {
     });
   });
 
-  describe('Deleting existing errortype REDUCER', () => {
-    it('should reduce the action DeleteErrorType', () => {
-      const selected = MOCK_DATA[1];
-      const payload = selected.Id;
-      const action = new DeleteErrorr(payload);
-      const newState = sharedReducer(state, action);
+  // describe('Deleting existing errortype REDUCER', () => {
+  //   it('should reduce the action DeleteErrorType', () => {
+  //     const selected = MOCK_DATA[1];
+  //     const payload = selected.Id;
+  //    // const errors = state.errors.filter(f => f.Id !== state.selected.Id)
+  //     const action = new DeleteErrorr(payload);
+  //     const newState = sharedReducer(state, action);
 
-      expect({ ...newState }).toEqual({
-        ...state,
-        selected,
-        action: DeleteErrorr,
-        loaded: false
-      });
-      state = newState;
-    });
-    // it('should reduce the action DeleteErrorSuccess', () => {
-    //   const payload = MOCK_DATA[1];
-    //   const action = new DeleteErrorrSuccess(payload);
-    //   const errors = state.errors.filter(h => h.Id !== state.selected.Id);
-    //   const newState = sharedReducer(state, action);
-    //   expect({ ...newState }).toEqual({ ...state, errors, selected: null, loaded: true });
-    //   state = { ...state, selected: null, loaded: true };
-    // });
-    it('should reduce the action DeleteErrorError', () => {
-      const payload = new Error('Error while deleting the Errortype');
-      const action = new DeleteErrorrError(payload);
-      const newState = sharedReducer(state, action);
-      expect({ ...newState }).toEqual({ ...state, loaded: true, apiError: payload });
-    });
-  });
+  //     expect({ ...newState }).toEqual({
+  //       ...state,
+  //       selected,
+  //       errors: state.errors.filter(f => f.Id !== state.selected.Id),
+  //       action: SharedActionTypes.DeleteErrorrType,
+  //       loaded: false
+  //     });
+  //     state = newState;
+  //   });
 
-//   describe('Shared Reducer', () => {
-//     const getErrorId = it => it['id'];
-//     //let createError;
-//     beforeEach(() => {
-//       // createError = (id: string, message = '', type: string = ''): Error => ({
-//       //   id,
-//       //   message: name || `name-${id}`,
-//       //   type: type
-//       // });
-//     });
-  
-//     // describe('valid Shared actions ', () => {
-//     //   it('should return set the list of known Shared', () => {
-  
-//     //     console.log('Intial state' + JSON.stringify(initialState))
-//     //     const action = new AddErrorr(createError('123', 'I am error 123', 'Error'));
-//     //     const result: SharedState = sharedReducer(initialState, action);
-//     //     const errorId: string = getErrorId(result.errors[0]);
-  
-//     //     expect(result.loaded).toBe(true);
-//     //     expect(result.errors.length).toBe(1);
-//     //     expect(errorId).toBe('123');
-//     //   });
-//     // });
-// });
+  // //   it('should reduce the action DELETE_GAME_SUCCESS', () => {
+  // //     const payload = MOCK_DATA[1];
+  // //     const action = new RemoveGameSuccess(payload);
+  // //     const data = state.data.filter(h => h.id !== state.selected.id);
+  // //     const newState = reducer(state, action);
+  // //     expect({...newState}).toEqual( {...state, data, selected: null, done: true});
+  // //     state = {...state, selected: null, done: true};
+  // // });
+
+  //   it('should reduce the action DeleteErrorError', () => {
+  //     const payload = new Error('Error while deleting the Errortype');
+  //     const action = new DeleteErrorrError(payload);
+  //     const newState = sharedReducer(state, action);
+  //     expect({ ...newState }).toEqual({ ...state, loaded: true, apiError: payload });
+  //   });
+  // });
+
